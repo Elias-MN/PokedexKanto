@@ -11,13 +11,13 @@ header {
 
 header h1 {
     font-family: 'Pokemon Solid';
-    color: yellow;
-    text-shadow: 2px 2px 5px blue;
+    color: #f3f31c;
+    text-shadow: 2px -2px 2px #0034e7;
     letter-spacing: 5px;
 }
 
 select {
-    border: 2px solid yellow;
+    border: 2px solid #f3f31c;
     background: #c0c0ff;
 }
 
@@ -106,4 +106,30 @@ body {
 
 .ice {
     background: linear-gradient(rgb(234, 234, 234), #0096a9)
+}
+
+
+#spinner {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #f3f31c;
+    border-top: 3px solid #6884e5;
+    border-radius: 100%;
+    margin: auto;
+    display: none;
+    animation: spin 1s infinite linear;
+}
+
+#spinner.show {
+    display: block;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }

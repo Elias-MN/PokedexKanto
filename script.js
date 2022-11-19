@@ -5,6 +5,7 @@ const typesAPI = "https://pokeapi.co/api/v2/type/";
 //DOM
 const sectionPokedex = document.getElementById("pokedex");
 const selectTypes = document.getElementById("selectTypes");
+const spinner = document.getElementById("spinner");
 
 const dictionaryTypes = {
     normal: "Normal",
@@ -32,9 +33,11 @@ let pkmArray = [];
 
 // Obtiene un rango de pokemon de la API, los guarda en memoria y los dibuja
 async function getPokedex(minPokemon, maxPokemon) {
+    showSpinner();
     for (let id = minPokemon; id <= maxPokemon; id++) {
         await getPkm(id, null);
     }
+    hideSpinner();
     drawArray();
 }
 
@@ -153,6 +156,14 @@ const fillSelectTypes = dataTypes => {
         selectTypes.appendChild(optionElement);
     }
 
+}
+
+function showSpinner() {
+    spinner.classList.add('show');
+}
+
+function hideSpinner() {
+    spinner.classList.remove('show');
 }
 
 // Sólo obtenemos los datos de la API al cargar la página la primera vez
