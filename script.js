@@ -29,7 +29,15 @@ const dictionaryTypes = {
 }
 
 const cssTypes = ["grass", "ice", "fire", "water", "electric", "poison", "psychic", "ground", "dragon", "bug", "rock", "ghost"];
+
 let pkmArray = [];
+let pkmFavs = [];
+let pkmTypes = [];
+
+function updateLocalStorage(key, value) {
+    let valueToJSON = JSON.stringify(value);
+    localStorage.setItem(key, valueToJSON);
+}
 
 // Obtiene un rango de pokemon de la API, los guarda en memoria y los dibuja
 async function getPokedex(minPokemon, maxPokemon) {
@@ -76,21 +84,31 @@ async function getTypes() {
 function drawPokemonByType() {
     let type = selectTypes.value;
     sectionPokedex.innerHTML = "";
-    if (type == "all") {
-        pkmArray.forEach(dataPokemon => {
-            drawCard(dataPokemon);
-        });
-    } else {
-        pkmArray.forEach(dataPokemon => {
-            let firstType = dataPokemon.types[0].type.name;
-            // Algunos pokemon no tienen un segundo tipo
-            let secondType = undefined;
-            if (dataPokemon.types[1]) {
-                secondType = dataPokemon.types[1].type.name;
-            }
-            if (firstType == type || secondType == type)
+    switch (type) {
+        case "all":
+            pkmArray.forEach(dataPokemon => {
                 drawCard(dataPokemon);
-        });
+            });
+            break;
+        case "favourites":
+            pkmArray.forEach(dataPokemon => {
+                if (pkmFavs.includes(dataPokemon.id.toString())) {
+                    drawCard(dataPokemon);
+                }
+            });
+            break;
+        default:
+            pkmArray.forEach(dataPokemon => {
+                let firstType = dataPokemon.types[0].type.name;
+                // Algunos pokemon no tienen un segundo tipo
+                let secondType = undefined;
+                if (dataPokemon.types[1]) {
+                    secondType = dataPokemon.types[1].type.name;
+                }
+                if (firstType == type || secondType == type)
+                    drawCard(dataPokemon);
+            });
+            break;
     }
 }
 
@@ -127,11 +145,27 @@ const drawCard = dataPokemon => {
     }
     card.appendChild(image);
 
+    let favIcon = document.createElement("span");
+    favIcon.classList.add("material-icons", "nofavorite");
+    favIcon.innerText = "star_rate";
+    favIcon.setAttribute("id", dataPokemon.id);
+    favIcon.addEventListener("click", addFavourite);
+    if (pkmFavs.includes(dataPokemon.id.toString())) {
+        favIcon.classList.add("favorite");
+        favIcon.classList.remove("nofavorite");
+    } else {
+        favIcon.classList.add("nofavorite");
+        favIcon.classList.remove("favorite");
+    }
+
+    card.appendChild(favIcon);
+
     let firstType = dataPokemon.types[0].type.name;
     if (cssTypes.includes(firstType)) {
         card.classList.add(firstType);
     }
     card.classList.add("card");
+
     sectionPokedex.appendChild(card);
 }
 
@@ -166,10 +200,52 @@ function hideSpinner() {
     spinner.classList.remove('show');
 }
 
+async function checkLocalStorage() {
+    //Comprobar si las keys están creadas
+    let pkmFavLS = localStorage.getItem('pkmFavs');
+    if (pkmFavLS == undefined) {
+        const pkmFavJSON = JSON.stringify(pkmFavs);
+        localStorage.setItem('pkmFavs', pkmFavJSON);
+        pkmFavLS = localStorage.getItem('pkmFavs');
+    }
+
+    let pkmTypesLS = localStorage.getItem('pkmTypes');
+    if (pkmTypesLS == undefined) {
+        const pkmTypesJSON = JSON.stringify(pkmTypes);
+        localStorage.setItem('pkmTypes', pkmTypesJSON);
+        pkmTypesLS = localStorage.getItem('pkmTypes');
+    }
+
+    // Parsear los datos guardados
+    pkmFavs = JSON.parse(pkmFavLS);
+    pkmTypes = JSON.parse(pkmTypesLS);
+
+    if (pkmTypes.length == 0) {
+        getTypes();
+    }
+
+}
+
+function addFavourite() {
+    if (!pkmFavs.includes(this.id)) {
+        pkmFavs.push(this.id);
+        pkmFavs.sort();
+        this.classList.add("favorite");
+        this.classList.remove("nofavorite");
+    } else {
+        let index = pkmFavs.indexOf(this.id);
+        pkmFavs.splice(index, 1);
+        this.classList.add("nofavorite");
+        this.classList.remove("favorite");
+    }
+    updateLocalStorage("pkmFavs", pkmFavs)
+}
+
+
+
 // Sólo obtenemos los datos de la API al cargar la página la primera vez
 getPokedex(1, 151);
-getTypes();
-
+checkLocalStorage();
 
 // Si queremos añadir la carga de n número de pokemon en función del scroll
 /*

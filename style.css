@@ -55,6 +55,18 @@ body {
     filter: drop-shadow(2px -2px 1px black);
 }
 
+.card .nofavorite {
+    color: rgba(24, 24, 24, 0.99);
+}
+
+.card .favorite {
+    color: rgb(240, 240, 172);
+}
+
+.card .nofavorite:hover,
+.card .favorite:hover {
+    cursor: pointer;
+}
 
 .fire {
     background: linear-gradient(rgb(234, 234, 234), rgb(171 0 0));
