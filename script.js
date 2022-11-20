@@ -34,7 +34,7 @@ let pkmArray = [];
 let pkmFavs = [];
 let pkmTypes = [];
 
-const imgNoResults = "../img/charizard-sad.png";
+const imgNoResults = "./img/charizard-sad.png";
 
 function updateLocalStorage(key, value) {
     let valueToJSON = JSON.stringify(value);
