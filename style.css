@@ -19,6 +19,12 @@ body {
     background: #e9eaf5;
 }
 
+.textBox{
+    background: #383838;
+    margin: 10px 0;
+    border: 2px solid #f3f31c;
+}
+
 #pokedex {
     display: flex;
     flex-wrap: wrap;

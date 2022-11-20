@@ -192,15 +192,18 @@ const drawNoResults = () => {
     let image = document.createElement("img");
     image.setAttribute("src", imgNoResults);
     image.classList.add("noResultImg");
-
     card.appendChild(image);
 
+    let textBox = document.createElement("div");
+    textBox.classList.add("textBox");
     let title = document.createElement("h1");
     title.innerText = "Sin resultados";
     title.classList.add("pkmFont");
-    card.appendChild(title);
+    textBox.appendChild(title);
+    card.appendChild(textBox);
 
     sectionPokedex.appendChild(card);
+
 }
 
 function capitalize(word) {
