@@ -9,13 +9,6 @@ header {
     text-align: center;
 }
 
-header h1 {
-    font-family: 'Pokemon Solid';
-    color: #f3f31c;
-    text-shadow: 2px -2px 2px #0034e7;
-    letter-spacing: 5px;
-}
-
 select {
     border: 2px solid #f3f31c;
     background: #c0c0ff;
@@ -23,6 +16,7 @@ select {
 
 body {
     min-width: 330px;
+    background: #e9eaf5;
 }
 
 #pokedex {
@@ -47,6 +41,23 @@ body {
     border-radius: 5%;
     box-shadow: 3px -3px 2px #707070;
 
+}
+
+.noResultImg {
+    width: 100%;
+}
+
+/*
+    text-shadow: 2px 0 #0034e7, -2px 0 #0034e7, 0 2px #0034e7, 0 -2px #0034e7,
+        1px 1px #0034e7, -1px -1px #0034e7, 1px -1px #0034e7, -1px 1px #0034e7;
+
+*/
+.pkmFont {
+    font-family: 'Pokemon Solid';
+    color: #f3f31c;
+    letter-spacing: 5px;
+    text-align: center;
+    text-shadow: 3px -3px #0034e7;
 }
 
 .card img {

@@ -34,6 +34,8 @@ let pkmArray = [];
 let pkmFavs = [];
 let pkmTypes = [];
 
+const imgNoResults = "../img/charizard-sad.png";
+
 function updateLocalStorage(key, value) {
     let valueToJSON = JSON.stringify(value);
     localStorage.setItem(key, valueToJSON);
@@ -68,9 +70,14 @@ function addPkmToArray(pkm) {
 
 // Dibuja los pokemon guardados en memoria
 function drawArray() {
-    pkmArray.forEach(dataPokemon => {
-        drawCard(dataPokemon);
-    });
+    if (pkmArray.length == 0) {
+        drawNoResults();
+    } else {
+        pkmArray.forEach(dataPokemon => {
+            drawCard(dataPokemon);
+        });
+    }
+
 }
 
 // Obtiene de la API y rellena el selector de tipos
@@ -84,6 +91,7 @@ async function getTypes() {
 function drawPokemonByType() {
     let type = selectTypes.value;
     sectionPokedex.innerHTML = "";
+    let empty = true;
     switch (type) {
         case "all":
             pkmArray.forEach(dataPokemon => {
@@ -94,8 +102,12 @@ function drawPokemonByType() {
             pkmArray.forEach(dataPokemon => {
                 if (pkmFavs.includes(dataPokemon.id.toString())) {
                     drawCard(dataPokemon);
+                    empty = false;
                 }
             });
+            if (empty) {
+                drawNoResults();
+            }
             break;
         default:
             pkmArray.forEach(dataPokemon => {
@@ -105,9 +117,14 @@ function drawPokemonByType() {
                 if (dataPokemon.types[1]) {
                     secondType = dataPokemon.types[1].type.name;
                 }
-                if (firstType == type || secondType == type)
+                if (firstType == type || secondType == type) {
                     drawCard(dataPokemon);
+                    empty = false;
+                }
             });
+            if (empty) {
+                drawNoResults();
+            }
             break;
     }
 }
@@ -128,7 +145,7 @@ const drawCard = dataPokemon => {
     let card = document.createElement("div");
 
     let title = document.createElement("h1");
-    title.innerText = dataPokemon.name;
+    title.innerText = capitalize(dataPokemon.name);
     card.appendChild(title);
 
     let idPkm = document.createElement("h3");
@@ -167,6 +184,27 @@ const drawCard = dataPokemon => {
     card.classList.add("card");
 
     sectionPokedex.appendChild(card);
+}
+
+const drawNoResults = () => {
+    let card = document.createElement("div");
+
+    let image = document.createElement("img");
+    image.setAttribute("src", imgNoResults);
+    image.classList.add("noResultImg");
+
+    card.appendChild(image);
+
+    let title = document.createElement("h1");
+    title.innerText = "Sin resultados";
+    title.classList.add("pkmFont");
+    card.appendChild(title);
+
+    sectionPokedex.appendChild(card);
+}
+
+function capitalize(word) {
+    return word[0].toUpperCase() + word.slice(1).toLowerCase();
 }
 
 // Rellena el selector de tipos
